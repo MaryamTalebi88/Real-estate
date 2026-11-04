@@ -1,0 +1,110 @@
+name: app
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_USER: estatepro
+      POSTGRES_PASSWORD: estatepro_local_dev
+      POSTGRES_DB: estatepro
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U estatepro -d estatepro"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+    labels:
+      base44.project: "EstatePro"
+      base44.kind: infra
+
+  api:
+    image: node:22-bookworm-slim
+    restart: on-failure
+    working_dir: /app/server
+    volumes:
+      - "${BASE44_PROJECT_ROOT}:/app"
+      - api-deps:/app/server/node_modules
+      - uploads:/app/uploads
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - BASE44_PREVIEW_MODE
+      - DATABASE_URL=postgres://estatepro:estatepro_local_dev@db:5432/estatepro
+      - UPLOAD_DIR=/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - sh
+      - -ec
+      - |
+        if [ -f package-lock.json ]; then
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+        else
+          npm install --no-audit --no-fund
+        fi
+        exec node --watch-path=/app/server index.js
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - node -e "fetch('http://127.0.0.1:4000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    labels:
+      base44.project: "EstatePro API"
+      base44.kind: api
+      base44.port: 4000
+      base44.docs: /api/health
+
+  web:
+    image: node:22-bookworm-slim
+    restart: on-failure
+    working_dir: /app
+    volumes:
+      - "${BASE44_PROJECT_ROOT}:/app"
+      - web-deps:/app/node_modules
+    environment:
+      - BASE44_PREVIEW_MODE
+      - BASE44_SANDBOX_HOST_DOMAIN
+      - BASE44_PUBLIC_HOST_SUFFIX
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "3000:3000"
+    command:
+      - sh
+      - -ec
+      - |
+        if [ -f package-lock.json ]; then
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+        else
+          npm install --no-audit --no-fund
+        fi
+        exec npx vite --host 0.0.0.0 --port 3000
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - node -e "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    labels:
+      base44.project: "EstatePro"
+      base44.kind: web
+      base44.port: 3000
+
+volumes:
+  db-data:
+  api-deps:
+  web-deps:
+  uploads:
