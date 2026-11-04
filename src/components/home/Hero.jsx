@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Building2, Home, ShieldCheck, Star, Users } from 'lucide-react'
 import SearchBar from '../SearchBar.jsx'
+import HeroMedia from './HeroMedia.jsx'
 import { Counter, Reveal } from '../Reveal.jsx'
 import { useI18n } from '../../lib/i18n.jsx'
 import { useAppData } from '../../lib/appData.jsx'
@@ -44,9 +45,7 @@ export default function Hero() {
 
   return (
     <section className="hero">
-      <div className="hero-media">
-        <img src={settings.heroImage} alt="" />
-      </div>
+      <HeroMedia />
 
       <div className="hero-inner">
         <div>
@@ -69,7 +68,18 @@ export default function Hero() {
             <p className="hero-sub">{description}</p>
           </Reveal>
 
-          <Reveal delay={200}>
+          <Reveal delay={180}>
+            <div className="hero-actions">
+              <Link to="/properties" className="btn btn-gold btn-lg">
+                {t('hero.explore')}
+              </Link>
+              <Link to="/contact" className="btn btn-outline-light">
+                {t('hero.ctaViewing')}
+              </Link>
+            </div>
+          </Reveal>
+
+          <Reveal delay={240}>
             <SearchBar initial={{}} />
           </Reveal>
 

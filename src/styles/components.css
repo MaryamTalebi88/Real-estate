@@ -399,30 +399,32 @@ html[lang='fa'] .footer-grid h4 { letter-spacing: 0; text-transform: none; font-
   position: absolute;
   inset: 0;
   z-index: -2;
+  overflow: hidden;
+  background: #0b1218;
 }
-.hero-media img {
+/* The film fills the hero exactly: cover keeps every pixel undistorted, the
+   poster frame shows instantly while the video decodes. */
+.hero-media video,
+.hero-media-still {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  animation: hero-zoom 18s ease-out forwards;
 }
-@keyframes hero-zoom {
-  from { transform: scale(1.08); }
-  to { transform: scale(1); }
-}
+/* Elegant scrim: darker on the reading side, lighter over the villa. */
 .hero-media::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(100deg, rgba(9, 15, 20, 0.92) 0%, rgba(9, 15, 20, 0.72) 42%, rgba(9, 15, 20, 0.28) 78%),
-    linear-gradient(0deg, rgba(9, 15, 20, 0.72) 0%, rgba(9, 15, 20, 0) 45%);
+    linear-gradient(100deg, rgba(8, 13, 18, 0.92) 0%, rgba(8, 13, 18, 0.64) 38%, rgba(8, 13, 18, 0.16) 72%, rgba(8, 13, 18, 0.34) 100%),
+    linear-gradient(180deg, rgba(8, 13, 18, 0.55) 0%, rgba(8, 13, 18, 0.1) 24%, rgba(8, 13, 18, 0) 46%, rgba(8, 13, 18, 0.82) 100%);
 }
 html[dir='rtl'] .hero-media::after {
   background:
-    linear-gradient(-100deg, rgba(9, 15, 20, 0.92) 0%, rgba(9, 15, 20, 0.72) 42%, rgba(9, 15, 20, 0.28) 78%),
-    linear-gradient(0deg, rgba(9, 15, 20, 0.72) 0%, rgba(9, 15, 20, 0) 45%);
+    linear-gradient(-100deg, rgba(8, 13, 18, 0.92) 0%, rgba(8, 13, 18, 0.64) 38%, rgba(8, 13, 18, 0.16) 72%, rgba(8, 13, 18, 0.34) 100%),
+    linear-gradient(180deg, rgba(8, 13, 18, 0.55) 0%, rgba(8, 13, 18, 0.1) 24%, rgba(8, 13, 18, 0) 46%, rgba(8, 13, 18, 0.82) 100%);
 }
 .hero-inner {
   width: 100%;
@@ -473,6 +475,13 @@ html[lang='fa'] .hero h1 { line-height: 1.32; letter-spacing: 0; font-size: clam
   font-size: 1.06rem;
   line-height: 1.75;
 }
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-block-start: 32px;
+}
 .hero-aside {
   align-self: end;
   padding: 24px;
@@ -500,7 +509,25 @@ html[lang='fa'] .hero h1 { line-height: 1.32; letter-spacing: 0; font-size: clam
 @media (max-width: 980px) {
   .hero-inner { grid-template-columns: 1fr; gap: 32px; }
   .hero-aside { display: none; }
-  .hero { min-height: auto; padding-block: calc(var(--header-h) + 72px) 48px; }
+  .hero { padding-block: calc(var(--header-h) + 72px) 56px; }
+}
+@media (max-width: 700px) {
+  /* Portrait crop: keep the villa's centre of interest, not its edges. */
+  .hero-media video,
+  .hero-media-still { object-position: 50% 50%; }
+  /* Portrait reading order is vertical, so shade top and bottom instead of a side. */
+  .hero-media::after,
+  html[dir='rtl'] .hero-media::after {
+    background: linear-gradient(
+      180deg,
+      rgba(8, 13, 18, 0.7) 0%,
+      rgba(8, 13, 18, 0.42) 26%,
+      rgba(8, 13, 18, 0.68) 62%,
+      rgba(8, 13, 18, 0.95) 100%
+    );
+  }
+  .hero h1 { font-size: clamp(2.4rem, 9vw, 3.2rem); }
+  .hero-actions .btn { flex: 1 1 auto; }
 }
 
 /* ---------- Search bar ---------- */

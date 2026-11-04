@@ -76,6 +76,7 @@ const DICT = {
     'hero.rent': 'Rent',
     'hero.search': 'Search properties',
     'hero.explore': 'Explore properties',
+    'hero.ctaViewing': 'Book a private viewing',
 
     'card.forSale': 'For Sale',
     'card.forRent': 'For Rent',
@@ -375,6 +376,7 @@ const DICT = {
     'hero.rent': 'اجاره',
     'hero.search': 'جستجوی ملک',
     'hero.explore': 'مشاهده املاک',
+    'hero.ctaViewing': 'رزرو بازدید خصوصی',
 
     'card.forSale': 'برای فروش',
     'card.forRent': 'برای اجاره',
