@@ -412,19 +412,18 @@ html[lang='fa'] .footer-grid h4 { letter-spacing: 0; text-transform: none; font-
   object-fit: cover;
   object-position: center;
 }
-/* Elegant scrim: darker on the reading side, lighter over the villa. */
+/* Barely-there scrim: keeps the nav legible, leaves the villa untouched. */
 .hero-media::after {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(100deg, rgba(8, 13, 18, 0.92) 0%, rgba(8, 13, 18, 0.64) 38%, rgba(8, 13, 18, 0.16) 72%, rgba(8, 13, 18, 0.34) 100%),
-    linear-gradient(180deg, rgba(8, 13, 18, 0.55) 0%, rgba(8, 13, 18, 0.1) 24%, rgba(8, 13, 18, 0) 46%, rgba(8, 13, 18, 0.82) 100%);
-}
-html[dir='rtl'] .hero-media::after {
-  background:
-    linear-gradient(-100deg, rgba(8, 13, 18, 0.92) 0%, rgba(8, 13, 18, 0.64) 38%, rgba(8, 13, 18, 0.16) 72%, rgba(8, 13, 18, 0.34) 100%),
-    linear-gradient(180deg, rgba(8, 13, 18, 0.55) 0%, rgba(8, 13, 18, 0.1) 24%, rgba(8, 13, 18, 0) 46%, rgba(8, 13, 18, 0.82) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(8, 13, 18, 0.42) 0%,
+    rgba(8, 13, 18, 0) 20%,
+    rgba(8, 13, 18, 0) 76%,
+    rgba(8, 13, 18, 0.5) 100%
+  );
 }
 .hero-inner {
   width: 100%;
@@ -475,13 +474,6 @@ html[lang='fa'] .hero h1 { line-height: 1.32; letter-spacing: 0; font-size: clam
   font-size: 1.06rem;
   line-height: 1.75;
 }
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  margin-block-start: 32px;
-}
 .hero-aside {
   align-self: end;
   padding: 24px;
@@ -510,24 +502,6 @@ html[lang='fa'] .hero h1 { line-height: 1.32; letter-spacing: 0; font-size: clam
   .hero-inner { grid-template-columns: 1fr; gap: 32px; }
   .hero-aside { display: none; }
   .hero { padding-block: calc(var(--header-h) + 72px) 56px; }
-}
-@media (max-width: 700px) {
-  /* Portrait crop: keep the villa's centre of interest, not its edges. */
-  .hero-media video,
-  .hero-media-still { object-position: 50% 50%; }
-  /* Portrait reading order is vertical, so shade top and bottom instead of a side. */
-  .hero-media::after,
-  html[dir='rtl'] .hero-media::after {
-    background: linear-gradient(
-      180deg,
-      rgba(8, 13, 18, 0.7) 0%,
-      rgba(8, 13, 18, 0.42) 26%,
-      rgba(8, 13, 18, 0.68) 62%,
-      rgba(8, 13, 18, 0.95) 100%
-    );
-  }
-  .hero h1 { font-size: clamp(2.4rem, 9vw, 3.2rem); }
-  .hero-actions .btn { flex: 1 1 auto; }
 }
 
 /* ---------- Search bar ---------- */
