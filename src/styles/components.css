@@ -28,7 +28,7 @@
 .header-inner {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 22px;
   width: 100%;
   max-width: 1400px;
   margin-inline: auto;
@@ -64,14 +64,15 @@
 .main-nav {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   flex: 1 1 auto;
 }
 .nav-link {
   position: relative;
-  padding: 9px 13px;
+  padding: 9px 10px;
   border-radius: var(--radius-pill);
-  font-size: 0.9rem;
+  font-size: 0.86rem;
+  white-space: nowrap;
   font-weight: 500;
   color: inherit;
   opacity: 0.86;
@@ -307,10 +308,24 @@ html[dir='rtl'] .drawer { animation-name: slide-in-rtl; }
 .search-result strong { display: block; font-size: 0.92rem; }
 .search-result span { font-size: 0.78rem; color: rgba(255, 255, 255, 0.6); }
 
-@media (max-width: 1080px) {
+/* Nine links need real room: below this width the header switches to the drawer,
+   otherwise the nav wraps to a second line and crowds the logo. */
+@media (max-width: 1290px) {
   .main-nav { display: none; }
   .menu-toggle { display: inline-grid; }
   .header-actions .desktop-only { display: none; }
+  /* Nav is hidden here: push the controls to the far edge instead of crowding the logo. */
+  .header-actions { margin-inline-start: auto; }
+}
+
+@media (max-width: 560px) {
+  .header-inner { gap: 12px; padding-inline: 16px; }
+  .logo { font-size: 1.08rem; gap: 9px; }
+  .logo-mark { width: 36px; height: 36px; border-radius: 11px; }
+  .logo-mark svg { width: 18px; height: 18px; }
+  .header-actions { gap: 4px; }
+  .lang-switch button { padding: 4px 9px; font-size: 0.72rem; }
+  .icon-btn { width: 38px; height: 38px; }
 }
 
 /* ---------- Footer ---------- */
@@ -387,6 +402,7 @@ html[lang='fa'] .footer-grid h4 { letter-spacing: 0; text-transform: none; font-
 /* ---------- Hero ---------- */
 .hero {
   position: relative;
+  min-height: 100vh;
   min-height: 100svh;
   display: flex;
   align-items: center;
@@ -394,6 +410,17 @@ html[lang='fa'] .footer-grid h4 { letter-spacing: 0; text-transform: none; font-
   color: #fff;
   overflow: hidden;
   isolation: isolate;
+}
+/* The film dissolves into the page instead of ending on a hard cut. */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: -1;
+  height: clamp(84px, 15vh, 170px);
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(248, 247, 244, 0) 0%, var(--cream) 94%);
 }
 .hero-media {
   position: absolute;
@@ -419,10 +446,9 @@ html[lang='fa'] .footer-grid h4 { letter-spacing: 0; text-transform: none; font-
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(8, 13, 18, 0.42) 0%,
-    rgba(8, 13, 18, 0) 20%,
-    rgba(8, 13, 18, 0) 76%,
-    rgba(8, 13, 18, 0.5) 100%
+    rgba(8, 13, 18, 0.46) 0%,
+    rgba(8, 13, 18, 0.12) 16%,
+    rgba(8, 13, 18, 0) 34%
   );
 }
 .hero-inner {
